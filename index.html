@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Registro de Asistencia · Cementos Selva</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--g:#15532a;--g2:#1e7a3d;--gl:#ebf7ef;--y:#f5c800;--yb:#fffce8;--s:#1c2b22;--m:#6b7c71;--bd:#d3e0d8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Sora,sans-serif;background:#f0f4f1;min-height:100vh;color:var(--s)}
+.hdr{background:var(--g);padding:16px 18px;text-align:center}
+.hdr .chip{display:inline-block;background:rgba(255,255,255,.15);border-radius:6px;padding:4px 14px;color:#fff;font-weight:800;font-size:.9rem}
+.hdr h1{color:#fff;font-size:1.05rem;font-weight:700;margin-top:7px}
+.hdr p{color:rgba(255,255,255,.75);font-size:.78rem;margin-top:3px}
+.card{max-width:540px;margin:18px auto;padding:0 14px 40px}
+.sec{background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.08);margin-bottom:14px}
+.sh{background:var(--g);color:#fff;padding:11px 16px;font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;border-radius:12px 12px 0 0}
+.sb{padding:18px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.il label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--m);display:block;margin-bottom:3px}
+.il span{font-size:.85rem;font-weight:600;background:var(--gl);border-radius:6px;display:block;padding:7px 10px;min-height:32px}
+.il.full{grid-column:1/-1}
+.db{background:var(--y);border-radius:6px;padding:7px 10px;font-size:.85rem;font-weight:700;min-height:32px}
+.fld{display:flex;flex-direction:column;gap:5px;margin-bottom:13px}
+.fld label,.row2 label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--g)}
+.fld input{border:2.5px solid var(--bd);border-radius:10px;padding:13px 14px;font-size:1rem;font-family:inherit;color:var(--s);background:var(--yb);outline:none;width:100%;-webkit-appearance:none}
+.fld input:focus{border-color:var(--g2);box-shadow:0 0 0 4px rgba(30,122,61,.12)}
+.hint{font-size:.68rem;color:var(--m)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sig-container{border:2.5px solid var(--bd);border-radius:10px;background:var(--yb);overflow:hidden;margin-bottom:14px;user-select:none;-webkit-user-select:none}
+.sig-header{text-align:center;padding:9px;font-size:.72rem;color:var(--m);font-weight:600;border-bottom:1px dashed var(--bd);background:#fff}
+canvas#sig{display:block;width:100%;height:180px;touch-action:none;cursor:crosshair}
+.sig-footer{display:flex;justify-content:flex-end;padding:6px 10px;border-top:1px solid var(--bd);background:#fff}
+.bcl{font-size:.72rem;padding:5px 14px;border:1.5px solid #f5c6c0;border-radius:6px;background:#fff5f5;color:#c0392b;cursor:pointer;font-family:inherit;font-weight:700}
+.decl{display:flex;gap:10px;align-items:flex-start;background:var(--gl);border:1.5px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:14px;font-size:.78rem;line-height:1.5;cursor:pointer}
+.decl input{width:20px;height:20px;margin-top:2px;flex-shrink:0;accent-color:var(--g)}
+.bsub{width:100%;padding:15px;background:var(--g);color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}
+.bsub:disabled{background:var(--m);cursor:not-allowed}
+.alert{padding:11px 15px;border-radius:8px;font-size:.82rem;font-weight:600;margin-bottom:13px;display:none}
+.alert.err{background:#fdecea;color:#c0392b;display:block}
+#ok{display:none;text-align:center;padding:36px 16px}
+.oi{width:68px;height:68px;background:var(--g);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+#ok h2{font-size:1.25rem;color:var(--g);margin-bottom:8px}
+#ok p{font-size:.88rem;color:var(--m);line-height:1.7;margin-bottom:16px}
+.sp{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin-right:7px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+footer{text-align:center;padding:14px;font-size:.67rem;color:var(--m)}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="chip">C</div>
+  <h1>Registro de Asistencia</h1>
+  <p>Complete sus datos y coloque su firma</p>
+</div>
+
+<div class="card">
+  <div class="sec">
+    <div class="sh">Informacion de la Sesion</div>
+    <div class="sb">
+      <div class="info-grid">
+        <div class="il"><label>Tipo</label><span id="it">—</span></div>
+        <div class="il"><label>Fecha</label><div class="db" id="if">—</div></div>
+        <div class="il full"><label>Capacitador</label><span id="ic">—</span></div>
+        <div class="il full"><label>Codigo de sesion</label><span id="is" style="font-family:monospace">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" id="form-section">
+    <div class="sh">Sus Datos y Firma</div>
+    <div class="sb">
+      <div class="alert" id="myalert"></div>
+      <div class="fld"><label>Nombres</label><input type="text" id="f-nom" autocomplete="given-name" autocapitalize="words"></div>
+      <div class="fld row2">
+        <div class="fld" style="margin:0"><label>Apellido Paterno</label><input type="text" id="f-ap" autocomplete="family-name" autocapitalize="words"></div>
+        <div class="fld" style="margin:0"><label>Apellido Materno</label><input type="text" id="f-am" autocapitalize="words"></div>
+      </div>
+      <div class="fld">
+        <label>DNI o Carnet de extranjeria</label>
+        <input type="text" id="f-dni" maxlength="12" inputmode="numeric" placeholder="00000000">
+        <span class="hint">Sin puntos ni espacios</span>
+      </div>
+      <div class="fld"><label>Empresa / Area</label><input type="text" id="f-emp" placeholder="Nombre de su empresa o contrata"></div>
+
+      <div class="sig-container">
+        <div class="sig-header">✏️ Firme aqui con su dedo o mouse</div>
+        <canvas id="sig"></canvas>
+        <div class="sig-footer"><button type="button" class="bcl" onclick="cls()">Limpiar firma</button></div>
+      </div>
+
+      <label class="decl"><input type="checkbox" id="f-decl"><span id="decl-text"></span></label>
+
+      <button class="bsub" id="bs" onclick="enviar()">Confirmar mi asistencia</button>
+    </div>
+  </div>
+
+  <div class="sec" id="ok">
+    <div class="oi"><svg viewBox="0 0 36 36" fill="none" width="34"><path d="M7 18l8 8 14-14" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h2>✓ Asistencia registrada</h2>
+    <p>Su firma fue enviada correctamente.<br>Ya puede cerrar esta ventana.</p>
+    <button class="bsub" onclick="otraPersona()">Registrar a otra persona</button>
+  </div>
+</div>
+
+<footer>G-SEG-F-17 · Seguridad y Salud Ocupacional · Cementos Selva S.A.C.</footer>
+
+<script>
+// ============================================================
+// CONFIG: reemplazar por el bloque que imprime
+// obtenerConfigPaginaFirma() en el registro de Apps Script.
+// ============================================================
+var CONFIG = {
+  "FORM_ACTION": "https://docs.google.com/forms/d/e/1FAIpQLSfiVB_CRCVzcY0Nqe03irjCqYMXKRIWMaPx0FydXxWKeNmE5Q/formResponse",
+  "DECL_TEXT": "Declaro que asistí a la sesión indicada y acepto este registro como mi firma. Autorizo el tratamiento de mis datos personales conforme a la Ley N° 29733.",
+  "ENTRY": {
+    "sesion": "entry.1785774680",
+    "dni": "entry.216260698",
+    "ap": "entry.739501566",
+    "am": "entry.1266563604",
+    "nom": "entry.768006165",
+    "emp": "entry.690887486",
+    "decl": "entry.657325732",
+    "firma": "entry.470310794"
+  }
+};
+// ============================================================
+
+var MAX_FIRMA = 45000;
+var P = new URLSearchParams(location.search);
+var SID = (P.get('s') || '').trim().toUpperCase();
+
+document.getElementById('it').textContent = P.get('t') || '—';
+document.getElementById('if').textContent = P.get('f') || '—';
+document.getElementById('ic').textContent = P.get('c') || '—';
+document.getElementById('is').textContent = SID || '—';
+document.getElementById('decl-text').textContent = CONFIG.DECL_TEXT;
+
+if (!/^[A-Z0-9]{8}$/.test(SID)) {
+  showAlert('Enlace invalido: falta el codigo de sesion. Escanee el QR que le muestra el inspector.');
+  document.getElementById('bs').disabled = true;
+}
+
+// ── Canvas de firma ──────────────────────────────────────
+var cv = document.getElementById('sig'), cx, hs = false, dr = false, ready = false;
+function initCanvas() {
+  var dpr = window.devicePixelRatio || 1, r = cv.getBoundingClientRect();
+  cv.width = Math.floor(r.width * dpr); cv.height = Math.floor(r.height * dpr);
+  cx = cv.getContext('2d'); cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  cx.strokeStyle = '#1c2b22'; cx.lineWidth = 2.5; cx.lineCap = 'round'; cx.lineJoin = 'round';
+  hs = false; ready = true;
+}
+function pos(e) {
+  var r = cv.getBoundingClientRect(), s = e.touches ? e.touches[0] : e;
+  return { x: s.clientX - r.left, y: s.clientY - r.top };
+}
+function start(e) { e.preventDefault(); if (!ready) initCanvas(); dr = true; var p = pos(e); cx.beginPath(); cx.moveTo(p.x, p.y); }
+function move(e)  { e.preventDefault(); if (!dr) return; var p = pos(e); cx.lineTo(p.x, p.y); cx.stroke(); cx.beginPath(); cx.moveTo(p.x, p.y); hs = true; }
+function end()    { dr = false; }
+cv.addEventListener('mousedown', start); cv.addEventListener('mousemove', move);
+cv.addEventListener('mouseup', end); cv.addEventListener('mouseleave', end);
+cv.addEventListener('touchstart', start, { passive: false });
+cv.addEventListener('touchmove', move, { passive: false });
+cv.addEventListener('touchend', end); cv.addEventListener('touchcancel', end);
+window.addEventListener('resize', function() { if (!hs) ready = false; });
+function cls() { if (cx) cx.clearRect(0, 0, cv.width, cv.height); hs = false; }
+
+// Firma reducida a PNG pequeno (para que quepa en el Form y en la celda)
+function firmaPNG() {
+  var widths = [420, 340, 260];
+  for (var i = 0; i < widths.length; i++) {
+    var w = widths[i], h = Math.round(w * cv.height / cv.width);
+    var off = document.createElement('canvas'); off.width = w; off.height = h;
+    off.getContext('2d').drawImage(cv, 0, 0, w, h);
+    var data = off.toDataURL('image/png');
+    if (data.length <= MAX_FIRMA) return data;
+  }
+  return '';
+}
+
+// ── Envio al Google Form ─────────────────────────────────
+function enviar() {
+  var nom = val('f-nom'), ap = val('f-ap'), am = val('f-am'), emp = val('f-emp');
+  var dni = val('f-dni').replace(/\s/g, '').toUpperCase();
+  if (!nom) return showAlert('Ingrese sus nombres.');
+  if (!ap)  return showAlert('Ingrese su apellido paterno.');
+  if (!/^[A-Z0-9]{8,12}$/.test(dni)) return showAlert('Ingrese un DNI o carnet valido (8 a 12 caracteres, sin espacios).');
+  if (!emp) return showAlert('Ingrese su empresa o area.');
+  if (!hs)  return showAlert('Por favor coloque su firma.');
+  if (!document.getElementById('f-decl').checked) return showAlert('Marque la casilla de declaracion para continuar.');
+
+  var firma = firmaPNG();
+  if (!firma) return showAlert('La firma es demasiado grande. Limpie y firme de nuevo.');
+
+  var b = document.getElementById('bs');
+  b.disabled = true; b.innerHTML = '<span class="sp"></span>Registrando...';
+
+  var E = CONFIG.ENTRY, body = new URLSearchParams();
+  body.append(E.sesion, SID);
+  body.append(E.dni, dni);
+  body.append(E.ap, ap);
+  body.append(E.am, am);
+  body.append(E.nom, nom);
+  body.append(E.emp, emp);
+  body.append(E.decl, CONFIG.DECL_TEXT);
+  body.append(E.firma, firma);
+
+  fetch(CONFIG.FORM_ACTION, { method: 'POST', mode: 'no-cors', body: body })
+    .then(function() {
+      document.getElementById('form-section').style.display = 'none';
+      document.getElementById('ok').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    })
+    .catch(function() {
+      b.disabled = false; b.textContent = 'Confirmar mi asistencia';
+      showAlert('Error de conexion. Verifique su internet e intente nuevamente.');
+    });
+}
+
+// Modo tablet: limpiar y dejar listo para la siguiente persona
+function otraPersona() {
+  ['f-nom','f-ap','f-am','f-dni','f-emp'].forEach(function(id){ document.getElementById(id).value = ''; });
+  document.getElementById('f-decl').checked = false;
+  cls(); clearAlert();
+  var b = document.getElementById('bs'); b.disabled = false; b.textContent = 'Confirmar mi asistencia';
+  document.getElementById('ok').style.display = 'none';
+  document.getElementById('form-section').style.display = 'block';
+  ready = false;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function val(id) { return document.getElementById(id).value.replace(/\s+/g, ' ').trim(); }
+function showAlert(m) { var a = document.getElementById('myalert'); a.textContent = m; a.className = 'alert err'; a.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+function clearAlert() { document.getElementById('myalert').className = 'alert'; }
+</script>
+</body>
+</html>
